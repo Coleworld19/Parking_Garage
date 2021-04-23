@@ -24,6 +24,13 @@
 
 class Parking_Garage():
 
+
+    def __init__(self, parking_spaces, cost_per_hour):
+        self.parking_spaces = parking_spaces
+        self.cost_per_hour = cost_per_hour
+        self.available_tickets = parking_spaces
+        self.available_spaces = parking_spaces
+
     all_tickets = {
         # 1 : "Unpaid"
         # 2 : "Unpaid"
@@ -31,11 +38,7 @@ class Parking_Garage():
     }
 
     active_tickets = []
-    available_tickets = 0
 
-    def __init__(self, parking_spaces, cost_per_hour):
-        self.parking_spaces = parking_spaces
-        self.cost_per_hour = cost_per_hour
 
     def takeTicket(self): #Cole's Baby
 
@@ -67,6 +70,10 @@ class Parking_Garage():
         total = (time / 60) * self.cost_per_hour
 
         #Show them their total
+        total = round(total, 2)
+        total = str(total)
+        if total[-2:] == ".0":
+            total = total + "0"
         print(f"Your total for {time} minutes is ${total}")
 
         return current_ticket
@@ -89,35 +96,53 @@ class Parking_Garage():
         #Update the dictionary to paid status
             self.all_tickets[current_ticket] = "Paid"
 
+        return current_ticket # can remove this once the take ticket function is returning the ticket number
 
-    def leaveGarage(self): #Felix's Baby
 
-        #Make sure their ticket is paid, if it is display "thank you, have a nice day"
+    def leaveGarage(self, ticket): #Felix's Baby
 
-        #If ticket is not paid, bring them back to payment
+        #check to see if they've even taken a ticket yet
+        if ticket == 0:
+            print("You have not taken a ticket yet")
+        else:
+            #Make sure their ticket is paid, if it is display "thank you, have a nice day"
+            if self.all_tickets[ticket] == "Paid":
+                print("Thank you, have a nice day")
+                #Update the parking spaces + 1
+                self.available_spaces = self.available_spaces + 1
 
-        #Update the parking spaces + 1
+                #Update the available tickets + 1
+                self.available_tickets = self.available_tickets + 1
 
-        #Update the available tickets + 1
+                #Take their ticket out of the active_tickets list
+                self.active_tickets.remove(ticket)
 
-        #Take their ticket out of the active_tickets list
-        pass
+            else:
+                #If ticket is not paid, bring them back to payment
+                print("You have an unpaid balance. Please select the 'pay for parking' option and try again")
+                
 
+    
 
 def main():
+
+    ticket = 0
 
     while True:
         ask = input("What would you like to do? You can say 'take ticket', 'pay for parking', 'check my ticket', 'leave garage', or 'quit': ").lower()
         if ask == "quit":
             break
         if ask == "pay for parking":
-            garage.payForParking()
+            ticket = garage.payForParking()
         if ask == "check my ticket":
             garage.checkTicket()
         if ask == "take ticket":
             garage.takeTicket()
         if ask == "leave garage":
-            garage.leaveGarage()
+            garage.leaveGarage(ticket)
+
+        #TO DO
+        #Assign ticket variable when it's taken, not when it's paid
 
 
 garage = Parking_Garage(50, 10)
