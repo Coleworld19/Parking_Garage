@@ -25,7 +25,7 @@
 class Parking_Garage():
 
     all_tickets = {
-        # 1 : "Paid"
+        # 1 : "Unpaid"
         # 2 : "Unpaid"
         # 2 : "Unpaid"
     }
@@ -47,21 +47,51 @@ class Parking_Garage():
 
         pass
 
-    def payForParking(self): #David's Baby
+
+    def checkTicket(self): #David's Baby
+
+       #set up a loop to validate ticket number
+        while True:
+
+        #Ask which ticket they're paying
+            current_ticket = int(input("Please enter your ticket number: "))
+
+            #check to see if the ticket is valid, else ask for their ticket number again
+            if current_ticket in self.active_tickets:
+                break
+            else:
+                print("Please enter a valid ticket number")
 
         #Ask the user how much time they spent in the garage
+        time = int(input("How many total minutes did you spend in the garage? "))
+        total = (time / 60) * self.cost_per_hour
 
         #Show them their total
+        print(f"Your total for {time} minutes is ${total}")
+
+        return current_ticket
+
+
+    def payForParking(self): #David's Baby
+
+        #Run the check ticket function to figure out how much they owe and bring it over here
+        current_ticket = self.checkTicket()
 
         #Ask if they want to "pay"
+        pay = input("Would you like to pay? y/n ").lower()
 
         #Tell them "thank you for your payment"
-
+        if pay == "y":
+            print("Processing your payment...")
+            print("Success!")
+            print("Thank you for your payment")
+        
         #Update the dictionary to paid status
-        pass
+            self.all_tickets[current_ticket] = "Paid"
+
 
     def leaveGarage(self): #Felix's Baby
-        
+
         #Make sure their ticket is paid, if it is display "thank you, have a nice day"
 
         #If ticket is not paid, bring them back to payment
@@ -76,11 +106,19 @@ class Parking_Garage():
 
 def main():
 
-    takeTicket()
-    payForParking()
-    leaveGarage()
+    while True:
+        ask = input("What would you like to do? You can say 'take ticket', 'pay for parking', 'check my ticket', 'leave garage', or 'quit': ").lower()
+        if ask == "quit":
+            break
+        if ask == "pay for parking":
+            garage.payForParking()
+        if ask == "check my ticket":
+            garage.checkTicket()
+        if ask == "take ticket":
+            garage.takeTicket()
+        if ask == "leave garage":
+            garage.leaveGarage()
 
 
 garage = Parking_Garage(50, 10)
 main()
-
