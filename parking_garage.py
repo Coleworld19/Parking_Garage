@@ -31,24 +31,34 @@ class Parking_Garage():
         self.available_tickets = parking_spaces
         self.available_spaces = parking_spaces
 
-    all_tickets = {
-        # 1 : "Unpaid"
-        # 2 : "Unpaid"
-        # 2 : "Unpaid"
-    }
+    all_tickets = {}
 
     active_tickets = []
 
 
     def takeTicket(self): #Cole's Baby
+        while True:
+            #Ask the user if they want to take a ticket
+            ask=input("Do you want a ticket?")
+            if ask.lower()=="no":
+                break
+            elif ask.lower()=="yes":
+            #Make sure there's enough tickets to give them
+                if self.available_tickets >=1:
+                    
 
-        #Ask the user if they want to take a ticket
+                    #"Give them a ticket" - decrease available tickets and available spaces by 1
+                    new_ticket_num = len(self.all_tickets.keys()) + 1
+                    self.all_tickets[new_ticket_num] = "Unpaid"
+                    self.active_tickets.append(new_ticket_num)
+                    self.available_tickets = self.available_tickets -1
+                    self.available_spaces = self.available_spaces -1 
+                    break
+                else:
+                    print("Not enough Tickets")
+                    break
 
-        #Make sure there's enough tickets to give them
-
-        #"Give them a ticket" - decrease available tickets and available spaces by 1
-
-        pass
+        return new_ticket_num
 
 
     def checkTicket(self): #David's Baby
@@ -133,11 +143,11 @@ def main():
         if ask == "quit":
             break
         if ask == "pay for parking":
-            ticket = garage.payForParking()
+            garage.payForParking()
         if ask == "check my ticket":
             garage.checkTicket()
         if ask == "take ticket":
-            garage.takeTicket()
+            ticket = garage.takeTicket()
         if ask == "leave garage":
             garage.leaveGarage(ticket)
 
